@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 namespace EntityLayer.Concrete
 {
-    public class AppUser:IdentityRole
+    public class AppUser:IdentityUser<string>
     {
     }
 }

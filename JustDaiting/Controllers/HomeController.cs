@@ -1,4 +1,6 @@
-﻿using JustDaiting.Models;
+﻿using EntityLayer.Concrete;
+using JustDaiting.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,15 +12,15 @@ using System.Threading.Tasks;
 namespace JustDaiting.Controllers
 {
     public class HomeController : Controller
+    { 
+        private readonly UserManager<AppUser> _userManager;
+
+    public HomeController(UserManager<AppUser> userManager)
     {
-        private readonly ILogger<HomeController> _logger;
+        _userManager = userManager;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
+    public IActionResult Index()
         {
             return View();
         }
@@ -33,5 +35,9 @@ namespace JustDaiting.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+    
+
+
     }
 }

@@ -1,4 +1,5 @@
 using DataAccessLayer.Concrete;
+using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,7 +32,8 @@ namespace JustDaiting
             {
                 opts.UseSqlServer(Configuration["ConnectionStrings:DefaultConnectionString"]);
             });
-
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<JustDaitingContext>();
+            services.AddControllersWithViews();
             services.AddControllersWithViews();
         }
 

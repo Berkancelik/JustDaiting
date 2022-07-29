@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EntityLayer.DTOs
+namespace JustDaiting.ViewModels
 {
-    public class UserDto
+    public class UserViewModel
     {
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public string Id { get; set; }
         [Required(ErrorMessage = "Kullanıcı ismi gereklidir")]
         [Display(Name = "Kullanıcı Adı")]
         public string UserName { get; set; }

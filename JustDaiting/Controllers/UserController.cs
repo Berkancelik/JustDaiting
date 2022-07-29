@@ -1,7 +1,8 @@
 ﻿using EntityLayer.Concrete;
-using EntityLayer.DTOs;
+using JustDaiting.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace JustDaiting.Controllers
@@ -31,18 +32,20 @@ namespace JustDaiting.Controllers
             return View();
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> SignUp(UserDto userDto)
+        public async Task<IActionResult> Index(UserViewModel userViewModel)
         {
             if (ModelState.IsValid)
             {
                 AppUser user = new AppUser();
-                user.UserName = userDto.UserName;
-                user.Email = user.Email;
-                user.PhoneNumber = userDto.PhoneNumber;
+                user.UserName = userViewModel.UserName;
+                user.Email = userViewModel.Email;
+                user.PhoneNumber = userViewModel.PhoneNumber;
 
-                IdentityResult result = await _userManager.CreateAsync(user,userDto.Password);
+                user.Id = Guid.NewGuid().ToString();
 
+                IdentityResult result = await _userManager.CreateAsync(user, userViewModel.Password);
 
                 if (result.Succeeded)
                 {
@@ -56,7 +59,9 @@ namespace JustDaiting.Controllers
                     }
                 }
             }
-            return View(userDto);
+            return View(userViewModel);
         }
     }
 }
+
+

@@ -32,7 +32,21 @@ namespace JustDaiting
             {
                 opts.UseSqlServer(Configuration["ConnectionStrings:DefaultConnectionString"]);
             });
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<JustDaitingContext>();
+
+
+
+
+
+            services.AddIdentity<AppUser, AppRole>(opts =>
+            {
+                opts.Password.RequiredLength = 4;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireDigit = false;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<JustDaitingContext>();
+
+
             services.AddControllersWithViews();
             services.AddControllersWithViews();
         }

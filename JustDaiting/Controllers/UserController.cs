@@ -34,7 +34,7 @@ namespace JustDaiting.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Index(UserViewModel userViewModel)
+        public async Task<IActionResult> SignUp(UserViewModel userViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -42,14 +42,13 @@ namespace JustDaiting.Controllers
                 user.UserName = userViewModel.UserName;
                 user.Email = userViewModel.Email;
                 user.PhoneNumber = userViewModel.PhoneNumber;
-
                 user.Id = Guid.NewGuid().ToString();
 
                 IdentityResult result = await _userManager.CreateAsync(user, userViewModel.Password);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("LogIn");
+                    return RedirectToAction("LogIn","User");
                 }
                 else
                 {
@@ -59,6 +58,7 @@ namespace JustDaiting.Controllers
                     }
                 }
             }
+
             return View(userViewModel);
         }
     }

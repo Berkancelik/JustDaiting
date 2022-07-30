@@ -1,5 +1,6 @@
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
+using JustDaiting.CustomValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,7 +45,7 @@ namespace JustDaiting
                 opts.Password.RequireDigit = false;
                 opts.Password.RequireLowercase = false;
                 opts.Password.RequireUppercase = false;
-            }).AddEntityFrameworkStores<JustDaitingContext>();
+            }).AddPasswordValidator<CustomPasswordValidation>().AddEntityFrameworkStores<JustDaitingContext>();
 
 
             services.AddControllersWithViews();

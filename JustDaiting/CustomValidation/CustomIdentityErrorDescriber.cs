@@ -9,7 +9,6 @@ namespace JustDaiting.CustomValidation
             return new IdentityError()
             {
                 Code = "InvalidUserName",
-                Description = $"Bu {userName} geçersizdir!"
             };
         }
         public override IdentityError DuplicateEmail(string email)

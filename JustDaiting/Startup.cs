@@ -3,6 +3,7 @@ using EntityLayer.Concrete;
 using JustDaiting.CustomValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,19 @@ namespace JustDaiting
             {
                 opts.UseSqlServer(Configuration["ConnectionStrings:DefaultConnectionString"]);
             });
+
+            CookieBuilder cookieBuilder = new CookieBuilder();
+            cookieBuilder.Name = "MyBlog";
+            cookieBuilder.HttpOnly = false;
+            cookieBuilder.Expiration = System.TimeSpan.FromDays(60);
+            cookieBuilder.SameSite = SameSiteMode.Lax;
+            cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            services.ConfigureApplicationCookie(opts =>
+            {
+                opts.LoginPath = new PathString("/Home/Login");
+                opts.SlidingExpiration = true;
+            });
+
 
 
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace JustDaiting
 {
@@ -33,21 +34,20 @@ namespace JustDaiting
             CookieBuilder cookieBuilder = new CookieBuilder();
             cookieBuilder.Name = "MyBlog";
             cookieBuilder.HttpOnly = false;
-            cookieBuilder.Expiration = System.TimeSpan.FromDays(60);
             cookieBuilder.SameSite = SameSiteMode.Lax;
             cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             services.ConfigureApplicationCookie(opts =>
             {
                 opts.LoginPath = new PathString("/Home/Login");
+                opts.Cookie = cookieBuilder;
                 opts.SlidingExpiration = true;
+                opts.ExpireTimeSpan = TimeSpan.FromDays(60);
             });
+            services.AddMvc();
+        
 
 
-
-
-
-
-            services.AddIdentity<AppUser, AppRole>(opts =>
+        services.AddIdentity<AppUser, AppRole>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
                 opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
@@ -82,6 +82,7 @@ namespace JustDaiting
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseStatusCodePages();
             app.UseStaticFiles();
 
             app.UseRouting();

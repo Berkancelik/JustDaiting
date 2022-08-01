@@ -13,8 +13,8 @@ namespace JustDaiting.Controllers
 
     public class UserController : Controller
     {
-        public readonly UserManager<AppUser> userManager;
-        public readonly SignInManager<AppUser> signInManager;
+        public UserManager<AppUser> userManager { get; }
+        public SignInManager<AppUser> signInManager { get; }
 
         public UserController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
@@ -27,49 +27,45 @@ namespace JustDaiting.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult LogIn(string ReturnUrl)
         {
-            return View();
-        }
+            TempData["ReturnUrl"] = ReturnUrl;
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-        public IActionResult LogIn()
-        {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> LogIn(LoginViewModel login)
+        public async Task<IActionResult> LogIn(LoginViewModel userlogin)
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await userManager.FindByEmailAsync(login.Email);
+                AppUser user = await userManager.FindByEmailAsync(userlogin.Email);
+
                 if (user != null)
                 {
                     await signInManager.SignOutAsync();
-                    // ilk false kullanıcı cookie leri kaydedip, beni hatırla özelliği ile giirş yapma
-                    // ikinci false ise kullanıcı kilitlemek için kullanılmaktaıdr
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, login.Password, false, false);
+
+                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, userlogin.Password, userlogin.RememberMe, false);
 
                     if (result.Succeeded)
                     {
+                        if (TempData["ReturnUrl"] != null)
+                        {
+                            return Redirect(TempData["ReturnUrl"].ToString());
+                        }
+
                         return RedirectToAction("Index", "Members");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Geçersiz email adı veya şifresi");
+                    ModelState.AddModelError("", "Geçersiz email adresi veya şifresi");
                 }
             }
-            return View();
+
+            return View(userlogin);
         }
 
-
-        [HttpGet]
         public IActionResult SignUp()
         {
             return View();
@@ -99,10 +95,8 @@ namespace JustDaiting.Controllers
                     }
                 }
             }
+
             return View(userViewModel);
-
         }
-
-
     }
 }

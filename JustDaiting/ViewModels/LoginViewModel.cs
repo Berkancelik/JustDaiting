@@ -16,5 +16,7 @@ namespace JustDaiting.ViewModels
         [DataType(DataType.Password)]
         [MinLength(4, ErrorMessage = "Şifreniz en az 4 karakterli olmalıdır.")]
         public string Password { get; set; }
+        public bool RememberMe { get; set; }
+
     }
 }

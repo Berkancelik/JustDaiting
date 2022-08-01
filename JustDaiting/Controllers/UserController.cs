@@ -97,6 +97,24 @@ namespace JustDaiting.Controllers
             return View();
         }
 
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ResetPassword(PasswordResetViewModel passwordResetViewModel)
+        {
+            AppUser user = userManager.FindByEmailAsync(passwordResetViewModel.Email).Result;
+            if (user != null)
+            {
+                string passwordResetToken = userManager.GeneratePasswordResetTokenAsync(user).Result;
+            }
+            return View();
+        }
+
+
+
         [HttpPost]
         public async Task<IActionResult> SignUp(UserViewModel userViewModel)
         {

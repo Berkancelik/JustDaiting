@@ -45,7 +45,9 @@ namespace JustDaiting
             })
                 .AddUserValidator<CustomPasswordValidation>()
                 .AddPasswordValidator<CustomPasswordValidation>()
+                .AddErrorDescriber<CustomIdentityErrorDescriber>()
                 .AddEntityFrameworkStores<JustDaitingContext>();
+            
 
 
             services.AddControllersWithViews();

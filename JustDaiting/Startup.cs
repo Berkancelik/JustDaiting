@@ -42,7 +42,10 @@ namespace JustDaiting
                 opts.Password.RequireDigit = false;
                 opts.Password.RequireLowercase = false;
                 opts.Password.RequireUppercase = false;
-            }).AddPasswordValidator<CustomPasswordValidation>().AddEntityFrameworkStores<JustDaitingContext>();
+            })
+                .AddUserValidator<CustomPasswordValidation>()
+                .AddPasswordValidator<CustomPasswordValidation>()
+                .AddEntityFrameworkStores<JustDaitingContext>();
 
 
             services.AddControllersWithViews();

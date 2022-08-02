@@ -4,6 +4,7 @@ using JustDaiting.CustomValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,24 +45,24 @@ namespace JustDaiting
                 opts.ExpireTimeSpan = TimeSpan.FromDays(60);
             });
             services.AddMvc();
-        
 
 
-        services.AddIdentity<AppUser, AppRole>(opts =>
-            {
-                opts.User.RequireUniqueEmail = true;
-                opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                opts.Password.RequiredLength = 4;
-                opts.Password.RequireNonAlphanumeric = false;
-                opts.Password.RequireDigit = false;
-                opts.Password.RequireLowercase = false;
-                opts.Password.RequireUppercase = false;
-            })
-                .AddUserValidator<CustomPasswordValidation>()
-                .AddPasswordValidator<CustomPasswordValidation>()
-                .AddErrorDescriber<CustomIdentityErrorDescriber>()
-                .AddEntityFrameworkStores<JustDaitingContext>();
-            
+
+            services.AddIdentity<AppUser, AppRole>(opts =>
+                {
+                    opts.User.RequireUniqueEmail = true;
+                    opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    opts.Password.RequiredLength = 4;
+                    opts.Password.RequireNonAlphanumeric = false;
+                    opts.Password.RequireDigit = false;
+                    opts.Password.RequireLowercase = false;
+                    opts.Password.RequireUppercase = false;
+                })
+                    .AddUserValidator<CustomPasswordValidation>()
+                    .AddPasswordValidator<CustomPasswordValidation>()
+                    .AddErrorDescriber<CustomIdentityErrorDescriber>()
+                    .AddEntityFrameworkStores<JustDaitingContext>().AddDefaultTokenProviders();
+
 
 
             services.AddControllersWithViews();
@@ -78,7 +79,7 @@ namespace JustDaiting
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-             
+
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

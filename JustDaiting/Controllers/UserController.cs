@@ -109,9 +109,25 @@ namespace JustDaiting.Controllers
             if (user != null)
             {
                 string passwordResetToken = userManager.GeneratePasswordResetTokenAsync(user).Result;
-            }
-            return View();
+            //    string passwordResetLink = Url.Action("ResetPasswordConfirm", "Home", new
+            //    {
+            //        userId = user.Id,
+            //        token = passwordResetToken,
+
+            //    }, HttpContext.Request.Scheme);
+
+            //    Helper.PasswordReset.PasswordResetSendEmail(passwordResetLink);
+            //    ViewBag.status = "successfull";
+            //}
         }
+            return View();
+        //           else
+        //    {
+        //        ModelState.AddModelError("", "Sistem de kayıtlı email adresi bulunamamıştır");
+        //    }
+        //    return View(passwordResetViewModel);
+        //}
+    }
 
 
 

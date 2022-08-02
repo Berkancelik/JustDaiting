@@ -109,25 +109,25 @@ namespace JustDaiting.Controllers
             if (user != null)
             {
                 string passwordResetToken = userManager.GeneratePasswordResetTokenAsync(user).Result;
-            //    string passwordResetLink = Url.Action("ResetPasswordConfirm", "Home", new
+                //    string passwordResetLink = Url.Action("ResetPasswordConfirm", "Home", new
+                //    {
+                //        userId = user.Id,
+                //        token = passwordResetToken,
+
+                //    }, HttpContext.Request.Scheme);
+
+                //    Helper.PasswordReset.PasswordResetSendEmail(passwordResetLink);
+                //    ViewBag.status = "successfull";
+                //}
+            }
+            return View();
+            //           else
             //    {
-            //        userId = user.Id,
-            //        token = passwordResetToken,
-
-            //    }, HttpContext.Request.Scheme);
-
-            //    Helper.PasswordReset.PasswordResetSendEmail(passwordResetLink);
-            //    ViewBag.status = "successfull";
+            //        ModelState.AddModelError("", "Sistem de kayıtlı email adresi bulunamamıştır");
+            //    }
+            //    return View(passwordResetViewModel);
             //}
         }
-            return View();
-        //           else
-        //    {
-        //        ModelState.AddModelError("", "Sistem de kayıtlı email adresi bulunamamıştır");
-        //    }
-        //    return View(passwordResetViewModel);
-        //}
-    }
 
         public IActionResult ResetPasswordConfirm(string userId, string token)
         {
@@ -135,12 +135,44 @@ namespace JustDaiting.Controllers
             TempData["token"] = token;
             return View();
         }
-    
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPasswordConfirm([Bind("PasswordNew")] PasswordResetViewModel passwordResetViewModel)
+        {
+            string token = TempData["token"].ToString();
+            string userId = TempData["userId"].ToString();
+
+            AppUser user = await userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                IdentityResult result = await userManager.ResetPasswordAsync(user, token, passwordResetViewModel.PasswordNew);
+                if (result.Succeeded)
+                {
+                    await userManager.UpdateSecurityStampAsync(user);
+                    TempData["passwordResetInfo"] = "Şifreniz başarıli şekilde yenilenmiştir. Yeni şifreniz ile giriş yapabilirsiniz";
+                    ViewBag.status = "success";
+                }
+                else
+                {
+                    foreach (var item in result.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Hata meydana gelmiştir. Lütfen daha sonra tekrar deneyiniz");
+            }
+
+            return View();
+        }
 
 
 
 
-[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> SignUp(UserViewModel userViewModel)
         {
             if (ModelState.IsValid)

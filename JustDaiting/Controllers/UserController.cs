@@ -129,9 +129,18 @@ namespace JustDaiting.Controllers
         //}
     }
 
+        public IActionResult ResetPasswordConfirm(string userId, string token)
+        {
+            TempData["user_id"] = userId;
+            TempData["token"] = token;
+            return View();
+        }
+    
 
 
-        [HttpPost]
+
+
+[HttpPost]
         public async Task<IActionResult> SignUp(UserViewModel userViewModel)
         {
             if (ModelState.IsValid)
